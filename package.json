@@ -15,5 +15,19 @@
   },
   "peerDependencies": {
     "whatwg-url": "7.1.0"
+  },
+  "pluginType": "elizaos:plugin:1.0.0",
+  "pluginParameters": {
+    "type": "object",
+    "required": ["avalanchePrivateKey"],
+    "properties": {
+      "avalanchePrivateKey": {
+        "type": "string",
+        "description": "Avalanche Private Key"
+      }
+    }
+  },
+  "pluginEnv": {
+    "AVALANCHE_PRIVATE_KEY": "avalanchePrivateKey"
   }
 }
