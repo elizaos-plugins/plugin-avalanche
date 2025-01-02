@@ -65,13 +65,19 @@ export default {
     },
     description:
         "MUST use this action if the user requests to create a new token, the request might be varied, but it will always be a token creation.",
-    handler: async (
+    handler: async ({
+        runtime,
+        message,
+        state,
+        options: _options,
+        callback,
+    }: {
         runtime: IAgentRuntime,
         message: Memory,
         state: State,
-        _options: { [key: string]: unknown },
+        options: { [key: string]: unknown },
         callback?: HandlerCallback
-    ) => {
+    }) => {
         elizaLogger.log("Starting CREATE_TOKEN handler...");
 
         // Initialize or update state

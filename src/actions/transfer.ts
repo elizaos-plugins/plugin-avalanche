@@ -89,13 +89,19 @@ export default {
     },
     description:
         "MUST use this action if the user requests send a token or transfer a token, the request might be varied, but it will always be a token transfer.",
-    handler: async (
+    handler: async ({
+        runtime,
+        message,
+        state,
+        options: _options,
+        callback,
+    }: {
         runtime: IAgentRuntime,
         message: Memory,
         state: State,
-        _options: { [key: string]: unknown },
+        options: { [key: string]: unknown },
         callback?: HandlerCallback
-    ) => {
+    }) => {
         elizaLogger.log("Starting SEND_TOKEN handler...");
 
         // Validate transfer

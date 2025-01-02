@@ -89,13 +89,19 @@ export default {
     },
     description:
         "MUST use this action if the user requests to deposit into a yield-earning strategy, the request might be varied, but it will always be a deposit into a strategy.",
-    handler: async (
+    handler: async ({
+        runtime,
+        message,
+        state,
+        options: _options,
+        callback,
+    }: {
         runtime: IAgentRuntime,
         message: Memory,
         state: State,
-        _options: { [key: string]: unknown },
+        options: { [key: string]: unknown },
         callback?: HandlerCallback
-    ) => {
+    }) => {
         elizaLogger.log("Starting DEPOSIT_TO_STRATEGY handler...");
 
         // Initialize or update state
