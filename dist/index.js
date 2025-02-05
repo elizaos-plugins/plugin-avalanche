@@ -5666,13 +5666,13 @@ var createMarketAndToken = async (runtime, name, symbol) => {
       type: "function"
     }
   ];
-  if (name.length == 0) {
+  if (name.length === 0) {
     throw new Error("Name must be provided");
   }
   if (name.length > 32) {
     throw new Error("Name must be less than 12 characters");
   }
-  if (symbol.length == 0) {
+  if (symbol.length === 0) {
     throw new Error("Symbol must be provided");
   }
   if (symbol.length > 8) {
@@ -5741,7 +5741,7 @@ var createMarketAndToken = async (runtime, name, symbol) => {
 };
 
 // src/actions/tokenMillCreate.ts
-function isTokenMillCreateContent(runtime, content) {
+function isTokenMillCreateContent(_runtime, content) {
   elizaLogger3.debug("Content for create", content);
   return typeof content.name === "string" && typeof content.symbol === "string";
 }
@@ -5781,13 +5781,14 @@ var tokenMillCreate_default = {
   description: "MUST use this action if the user requests to create a new token, the request might be varied, but it will always be a token creation.",
   handler: async (runtime, message, state, _options, callback) => {
     elizaLogger3.log("Starting CREATE_TOKEN handler...");
-    if (!state) {
-      state = await runtime.composeState(message);
+    let currentState = state;
+    if (!currentState) {
+      currentState = await runtime.composeState(message);
     } else {
-      state = await runtime.updateRecentMessageState(state);
+      currentState = await runtime.updateRecentMessageState(currentState);
     }
     const transferContext = composeContext({
-      state,
+      state: currentState,
       template: transferTemplate
     });
     const content = await generateObject({
@@ -5870,9 +5871,9 @@ import {
   generateObject as generateObject2,
   ModelClass as ModelClass2
 } from "@elizaos/core";
-function isTransferContent(runtime, content) {
+function isTransferContent(_runtime, content) {
   elizaLogger4.debug("Content for transfer", content);
-  return typeof content.tokenAddress === "string" && typeof content.recipient === "string" && (typeof content.amount === "string" || typeof content.amount === "number");
+  return typeof content === "object" && content !== null && "tokenAddress" in content && "recipient" in content && "amount" in content && typeof content.tokenAddress === "string" && content.tokenAddress.startsWith("0x") && typeof content.recipient === "string" && content.recipient.startsWith("0x") && (typeof content.amount === "string" || typeof content.amount === "number");
 }
 var transferTemplate2 = `Respond with a JSON markdown block containing only the extracted values
 - Use null for any values that cannot be determined.
@@ -5934,13 +5935,14 @@ var transfer_default = {
       });
       return false;
     }
-    if (!state) {
-      state = await runtime.composeState(message);
+    let currentState = state;
+    if (!currentState) {
+      currentState = await runtime.composeState(message);
     } else {
-      state = await runtime.updateRecentMessageState(state);
+      currentState = await runtime.updateRecentMessageState(currentState);
     }
     const transferContext = composeContext2({
-      state,
+      state: currentState,
       template: transferTemplate2
     });
     const content = await generateObject2({
@@ -6012,9 +6014,9 @@ import {
   generateObject as generateObject3,
   ModelClass as ModelClass3
 } from "@elizaos/core";
-function isSwapContent(runtime, content) {
+function isSwapContent(_runtime, content) {
   elizaLogger5.debug("Content for swap", content);
-  return typeof content.fromTokenAddress === "string" && typeof content.toTokenAddress === "string" && (typeof content.recipient === "string" || !content.recipient) && (typeof content.amount === "string" || typeof content.amount === "number");
+  return typeof content === "object" && content !== null && "fromTokenAddress" in content && "toTokenAddress" in content && typeof content.fromTokenAddress === "string" && typeof content.toTokenAddress === "string" && (typeof content.recipient === "string" || !content.recipient) && (typeof content.amount === "string" || typeof content.amount === "number");
 }
 var transferTemplate3 = `Respond with a JSON markdown block containing only the extracted values
 - Use null for any values that cannot be determined.
@@ -6086,13 +6088,14 @@ var yakSwap_default = {
   description: "MUST use this action if the user requests swap a token, the request might be varied, but it will always be a token swap.",
   handler: async (runtime, message, state, _options, callback) => {
     elizaLogger5.log("Starting SWAP_TOKEN handler...");
-    if (!state) {
-      state = await runtime.composeState(message);
+    let currentState = state;
+    if (!currentState) {
+      currentState = await runtime.composeState(message);
     } else {
-      state = await runtime.updateRecentMessageState(state);
+      currentState = await runtime.updateRecentMessageState(currentState);
     }
     const swapContext = composeContext3({
-      state,
+      state: currentState,
       template: transferTemplate3
     });
     const content = await generateObject3({
@@ -6194,9 +6197,9 @@ import {
   generateObject as generateObject4,
   ModelClass as ModelClass4
 } from "@elizaos/core";
-function isStrategyContent(runtime, content) {
+function isStrategyContent(_runtime, content) {
   elizaLogger6.debug("Content for strategy", content);
-  return typeof content.depositTokenAddress === "string" && typeof content.strategyAddress === "string" && (typeof content.amount === "string" || typeof content.amount === "number");
+  return typeof content === "object" && content !== null && "depositTokenAddress" in content && "strategyAddress" in content && "amount" in content && typeof content.depositTokenAddress === "string" && typeof content.strategyAddress === "string" && (typeof content.amount === "string" || typeof content.amount === "number");
 }
 var strategyTemplate = `Respond with a JSON markdown block containing only the extracted values
 - Use null for any values that cannot be determined.
@@ -6248,13 +6251,14 @@ var yakStrategy_default = {
   description: "MUST use this action if the user requests to deposit into a yield-earning strategy, the request might be varied, but it will always be a deposit into a strategy.",
   handler: async (runtime, message, state, _options, callback) => {
     elizaLogger6.log("Starting DEPOSIT_TO_STRATEGY handler...");
-    if (!state) {
-      state = await runtime.composeState(message);
+    let currentState = state;
+    if (!currentState) {
+      currentState = await runtime.composeState(message);
     } else {
-      state = await runtime.updateRecentMessageState(state);
+      currentState = await runtime.updateRecentMessageState(currentState);
     }
     const strategyContext = composeContext4({
-      state,
+      state: currentState,
       template: strategyTemplate
     });
     const content = await generateObject4({
@@ -6384,17 +6388,13 @@ var walletProvider = {
       );
     }
     const account = getAccount(runtime);
-    let output = `# Wallet Balances
-
-`;
+    let output = "# Wallet Balances\n\n";
     output += `## Wallet Address
 
 \`${account.address}\`
 
 `;
-    output += `## Latest Token Balances
-
-`;
+    output += "## Latest Token Balances\n\n";
     for (const [token, address] of Object.entries(TOKEN_ADDRESSES)) {
       const decimals = await getDecimals(runtime, address);
       const balance = await getTokenBalance(
@@ -6405,12 +6405,8 @@ var walletProvider = {
       output += `${token}: ${formatUnits(balance, decimals)}
 `;
     }
-    output += `Note: These balances can be used at any time.
-
-`;
-    output += `## Balances in Yield Strategies
-
-`;
+    output += "Note: These balances can be used at any time.\n\n";
+    output += "## Balances in Yield Strategies\n\n";
     for (const [strategy, address] of Object.entries(STRATEGY_ADDRESSES)) {
       const balance = await getTokenBalance(
         runtime,
@@ -6421,9 +6417,7 @@ var walletProvider = {
       output += `${strategy}: ${formatUnits(balance, decimals)}
 `;
     }
-    output += `Note: These balances must be withdrawn from the strategy before they can be used.
-
-`;
+    output += "Note: These balances must be withdrawn from the strategy before they can be used.\n\n";
     elizaLogger9.debug("walletProvider::get output:", output);
     return output;
   }
