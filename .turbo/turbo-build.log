@@ -1,16 +1,15 @@
 
-
-> @elizaos/plugin-avalanche@0.1.8+build.1 build /Users/a/eliza-wrangler/packages/plugin-avalanche
+> @elizaos/plugin-avalanche@0.1.9 build /Users/gdesign/developer-projects/laborales/upstreet/eliza-last/eliza/packages/plugin-avalanche
 > tsup src/index.ts --format esm --no-dts
 
-[34mCLI[39m Building entry: src/index.ts
-[34mCLI[39m Using tsconfig: tsconfig.json
-[34mCLI[39m tsup v8.3.5
-[34mCLI[39m Using tsup config: /Users/a/eliza-wrangler/packages/plugin-avalanche/tsup.config.ts
-[34mCLI[39m Target: esnext
-[34mCLI[39m Cleaning output folder
-[34mESM[39m Build start
-[32mESM[39m [1mdist/chunk-RLU2MBUH.js [22m[32m127.17 KB[39m
-[32mESM[39m [1mdist/ccip-UTQEEQUV.js  [22m[32m219.00 B[39m
-[32mESM[39m [1mdist/index.js          [22m[32m205.94 KB[39m
-[32mESM[39m ⚡️ Build success in 553ms
+CLI Building entry: src/index.ts
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.3.5
+CLI Using tsup config: /Users/gdesign/developer-projects/laborales/upstreet/eliza-last/eliza/packages/plugin-avalanche/tsup.config.ts
+CLI Target: node16
+CLI Cleaning output folder
+ESM Build start
+ESM dist/index.js          211.20 KB
+ESM dist/ccip-XAKLSPSR.js  219.00 B
+ESM dist/chunk-EF67HYWB.js 128.63 KB
+ESM ⚡️ Build success in 278ms
