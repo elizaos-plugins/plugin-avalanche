@@ -3,7 +3,7 @@ import {
   offchainLookup,
   offchainLookupAbiItem,
   offchainLookupSignature
-} from "./chunk-RLU2MBUH.js";
+} from "./chunk-EF67HYWB.js";
 export {
   ccipRequest,
   offchainLookup,

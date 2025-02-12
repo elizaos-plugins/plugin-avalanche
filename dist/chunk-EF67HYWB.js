@@ -253,10 +253,12 @@ var errorConfig = {
 };
 var BaseError = class _BaseError extends Error {
   constructor(shortMessage, args = {}) {
+    var _a;
     const details = (() => {
+      var _a2;
       if (args.cause instanceof _BaseError)
         return args.cause.details;
-      if (args.cause?.message)
+      if ((_a2 = args.cause) == null ? void 0 : _a2.message)
         return args.cause.message;
       return args.details;
     })();
@@ -265,7 +267,7 @@ var BaseError = class _BaseError extends Error {
         return args.cause.docsPath || args.docsPath;
       return args.docsPath;
     })();
-    const docsUrl = errorConfig.getDocsUrl?.({ ...args, docsPath: docsPath4 });
+    const docsUrl = (_a = errorConfig.getDocsUrl) == null ? void 0 : _a.call(errorConfig, { ...args, docsPath: docsPath4 });
     const message = [
       shortMessage || "An error occurred.",
       "",
@@ -323,7 +325,7 @@ var BaseError = class _BaseError extends Error {
   }
 };
 function walk(err, fn) {
-  if (fn?.(err))
+  if (fn == null ? void 0 : fn(err))
     return err;
   if (err && typeof err === "object" && "cause" in err && err.cause !== void 0)
     return walk(err.cause, fn);
@@ -1799,7 +1801,7 @@ function decodeTuple(cursor, param, { staticPosition }) {
         staticPosition: start
       });
       consumed += consumed_;
-      value[hasUnnamedChild ? i : component?.name] = data;
+      value[hasUnnamedChild ? i : component == null ? void 0 : component.name] = data;
     }
     cursor.setPosition(staticPosition + 32);
     return [value, 32];
@@ -1809,7 +1811,7 @@ function decodeTuple(cursor, param, { staticPosition }) {
     const [data, consumed_] = decodeParameter(cursor, component, {
       staticPosition
     });
-    value[hasUnnamedChild ? i : component?.name] = data;
+    value[hasUnnamedChild ? i : component == null ? void 0 : component.name] = data;
     consumed += consumed_;
   }
   return [value, consumed];
@@ -1829,6 +1831,7 @@ function decodeString(cursor, { staticPosition }) {
   return [value, 32];
 }
 function hasDynamicChild(param) {
+  var _a;
   const { type } = param;
   if (type === "string")
     return true;
@@ -1837,7 +1840,7 @@ function hasDynamicChild(param) {
   if (type.endsWith("[]"))
     return true;
   if (type === "tuple")
-    return param.components?.some(hasDynamicChild);
+    return (_a = param.components) == null ? void 0 : _a.some(hasDynamicChild);
   const arrayComponents = getArrayComponents(param.type);
   if (arrayComponents && hasDynamicChild({ ...param, type: arrayComponents[1] }))
     return true;
@@ -2129,11 +2132,12 @@ var InvalidStorageKeySizeError = class extends BaseError {
 };
 var TransactionExecutionError = class extends BaseError {
   constructor(cause, { account, docsPath: docsPath4, chain, data, gas, gasPrice, maxFeePerGas, maxPriorityFeePerGas, nonce, to, value }) {
+    var _a;
     const prettyArgs = prettyPrint({
-      chain: chain && `${chain?.name} (id: ${chain?.id})`,
-      from: account?.address,
+      chain: chain && `${chain == null ? void 0 : chain.name} (id: ${chain == null ? void 0 : chain.id})`,
+      from: account == null ? void 0 : account.address,
       to,
-      value: typeof value !== "undefined" && `${formatEther(value)} ${chain?.nativeCurrency?.symbol || "ETH"}`,
+      value: typeof value !== "undefined" && `${formatEther(value)} ${((_a = chain == null ? void 0 : chain.nativeCurrency) == null ? void 0 : _a.symbol) || "ETH"}`,
       data,
       gas,
       gasPrice: typeof gasPrice !== "undefined" && `${formatGwei(gasPrice)} gwei`,
@@ -2196,11 +2200,12 @@ var getUrl = (url) => url;
 // ../../node_modules/viem/_esm/errors/contract.js
 var CallExecutionError = class extends BaseError {
   constructor(cause, { account: account_, docsPath: docsPath4, chain, data, gas, gasPrice, maxFeePerGas, maxPriorityFeePerGas, nonce, to, value, stateOverride }) {
+    var _a;
     const account = account_ ? parseAccount(account_) : void 0;
     let prettyArgs = prettyPrint({
-      from: account?.address,
+      from: account == null ? void 0 : account.address,
       to,
-      value: typeof value !== "undefined" && `${formatEther(value)} ${chain?.nativeCurrency?.symbol || "ETH"}`,
+      value: typeof value !== "undefined" && `${formatEther(value)} ${((_a = chain == null ? void 0 : chain.nativeCurrency) == null ? void 0 : _a.symbol) || "ETH"}`,
       data,
       gas,
       gasPrice: typeof gasPrice !== "undefined" && `${formatGwei(gasPrice)} gwei`,
@@ -2244,7 +2249,7 @@ var ContractFunctionExecutionError = class extends BaseError {
     const prettyArgs = prettyPrint({
       address: contractAddress && getContractAddress(contractAddress),
       function: functionWithParams,
-      args: formattedArgs && formattedArgs !== "()" && `${[...Array(functionName?.length ?? 0).keys()].map(() => " ").join("")}${formattedArgs}`,
+      args: formattedArgs && formattedArgs !== "()" && `${[...Array((functionName == null ? void 0 : functionName.length) ?? 0).keys()].map(() => " ").join("")}${formattedArgs}`,
       sender
     });
     super(cause.shortMessage || `An unknown error occurred while executing the contract function "${functionName}".`, {
@@ -2332,7 +2337,7 @@ var ContractFunctionRevertedError = class extends BaseError {
           }) : void 0;
           metaMessages = [
             errorWithParams ? `Error: ${errorWithParams}` : "",
-            formattedArgs && formattedArgs !== "()" ? `       ${[...Array(errorName?.length ?? 0).keys()].map(() => " ").join("")}${formattedArgs}` : ""
+            formattedArgs && formattedArgs !== "()" ? `       ${[...Array((errorName == null ? void 0 : errorName.length) ?? 0).keys()].map(() => " ").join("")}${formattedArgs}` : ""
           ];
         }
       } catch (err) {
@@ -2491,7 +2496,8 @@ function prepareEncodeFunctionData(parameters) {
 function encodeFunctionData(parameters) {
   const { args } = parameters;
   const { abi, functionName } = (() => {
-    if (parameters.abi.length === 1 && parameters.functionName?.startsWith("0x"))
+    var _a;
+    if (parameters.abi.length === 1 && ((_a = parameters.functionName) == null ? void 0 : _a.startsWith("0x")))
       return parameters;
     return prepareEncodeFunctionData(parameters);
   })();
@@ -2503,7 +2509,8 @@ function encodeFunctionData(parameters) {
 
 // ../../node_modules/viem/_esm/utils/chain/getChainContractAddress.js
 function getChainContractAddress({ blockNumber, chain, contract: name }) {
-  const contract = chain?.contracts?.[name];
+  var _a;
+  const contract = (_a = chain == null ? void 0 : chain.contracts) == null ? void 0 : _a[name];
   if (!contract)
     throw new ChainDoesNotSupportContract({
       chain,
@@ -2524,7 +2531,8 @@ function getChainContractAddress({ blockNumber, chain, contract: name }) {
 // ../../node_modules/viem/_esm/errors/node.js
 var ExecutionRevertedError = class extends BaseError {
   constructor({ cause, message } = {}) {
-    const reason = message?.replace("execution reverted: ", "")?.replace("execution reverted", "");
+    var _a;
+    const reason = (_a = message == null ? void 0 : message.replace("execution reverted: ", "")) == null ? void 0 : _a.replace("execution reverted", "");
     super(`Execution reverted ${reason ? `with reason: ${reason}` : "for an unknown reason"}.`, {
       cause,
       name: "ExecutionRevertedError"
@@ -2693,7 +2701,7 @@ Object.defineProperty(TipAboveFeeCapError, "nodeMessage", {
 });
 var UnknownNodeError = class extends BaseError {
   constructor({ cause }) {
-    super(`An error occurred while executing: ${cause?.shortMessage}`, {
+    super(`An error occurred while executing: ${cause == null ? void 0 : cause.shortMessage}`, {
       cause,
       name: "UnknownNodeError"
     });
@@ -2784,7 +2792,7 @@ var RpcError = class extends BaseError {
     super(shortMessage, {
       cause,
       docsPath: docsPath4,
-      metaMessages: metaMessages || cause?.metaMessages,
+      metaMessages: metaMessages || (cause == null ? void 0 : cause.metaMessages),
       name: name || "RpcError"
     });
     Object.defineProperty(this, "code", {
@@ -3103,7 +3111,7 @@ var UnknownRpcError = class extends RpcError {
 // ../../node_modules/viem/_esm/utils/errors/getNodeError.js
 function getNodeError(err, args) {
   const message = (err.details || "").toLowerCase();
-  const executionRevertedError = err instanceof BaseError ? err.walk((e) => e?.code === ExecutionRevertedError.code) : err;
+  const executionRevertedError = err instanceof BaseError ? err.walk((e) => (e == null ? void 0 : e.code) === ExecutionRevertedError.code) : err;
   if (executionRevertedError instanceof BaseError)
     return new ExecutionRevertedError({
       cause: err,
@@ -3117,32 +3125,32 @@ function getNodeError(err, args) {
   if (FeeCapTooHighError.nodeMessage.test(message))
     return new FeeCapTooHighError({
       cause: err,
-      maxFeePerGas: args?.maxFeePerGas
+      maxFeePerGas: args == null ? void 0 : args.maxFeePerGas
     });
   if (FeeCapTooLowError.nodeMessage.test(message))
     return new FeeCapTooLowError({
       cause: err,
-      maxFeePerGas: args?.maxFeePerGas
+      maxFeePerGas: args == null ? void 0 : args.maxFeePerGas
     });
   if (NonceTooHighError.nodeMessage.test(message))
-    return new NonceTooHighError({ cause: err, nonce: args?.nonce });
+    return new NonceTooHighError({ cause: err, nonce: args == null ? void 0 : args.nonce });
   if (NonceTooLowError.nodeMessage.test(message))
-    return new NonceTooLowError({ cause: err, nonce: args?.nonce });
+    return new NonceTooLowError({ cause: err, nonce: args == null ? void 0 : args.nonce });
   if (NonceMaxValueError.nodeMessage.test(message))
-    return new NonceMaxValueError({ cause: err, nonce: args?.nonce });
+    return new NonceMaxValueError({ cause: err, nonce: args == null ? void 0 : args.nonce });
   if (InsufficientFundsError.nodeMessage.test(message))
     return new InsufficientFundsError({ cause: err });
   if (IntrinsicGasTooHighError.nodeMessage.test(message))
-    return new IntrinsicGasTooHighError({ cause: err, gas: args?.gas });
+    return new IntrinsicGasTooHighError({ cause: err, gas: args == null ? void 0 : args.gas });
   if (IntrinsicGasTooLowError.nodeMessage.test(message))
-    return new IntrinsicGasTooLowError({ cause: err, gas: args?.gas });
+    return new IntrinsicGasTooLowError({ cause: err, gas: args == null ? void 0 : args.gas });
   if (TransactionTypeNotSupportedError.nodeMessage.test(message))
     return new TransactionTypeNotSupportedError({ cause: err });
   if (TipAboveFeeCapError.nodeMessage.test(message))
     return new TipAboveFeeCapError({
       cause: err,
-      maxFeePerGas: args?.maxFeePerGas,
-      maxPriorityFeePerGas: args?.maxPriorityFeePerGas
+      maxFeePerGas: args == null ? void 0 : args.maxFeePerGas,
+      maxPriorityFeePerGas: args == null ? void 0 : args.maxPriorityFeePerGas
     });
   return new UnknownNodeError({
     cause: err
@@ -3265,12 +3273,12 @@ function createBatchScheduler({ fn, id, shouldSplitBatch, wait = 0, sort }) {
         data.sort(sort);
       for (let i = 0; i < scheduler.length; i++) {
         const { resolve } = scheduler[i];
-        resolve?.([data[i], data]);
+        resolve == null ? void 0 : resolve([data[i], data]);
       }
     }).catch((err) => {
       for (let i = 0; i < scheduler.length; i++) {
         const { reject } = scheduler[i];
-        reject?.(err);
+        reject == null ? void 0 : reject(err);
       }
     });
   };
@@ -3282,7 +3290,7 @@ function createBatchScheduler({ fn, id, shouldSplitBatch, wait = 0, sort }) {
     flush,
     async schedule(args) {
       const { promise, resolve, reject } = withResolvers();
-      const split = shouldSplitBatch?.([...getBatchedArgs(), args]);
+      const split = shouldSplitBatch == null ? void 0 : shouldSplitBatch([...getBatchedArgs(), args]);
       if (split)
         exec();
       const hasActiveScheduler = getScheduler().length > 0;
@@ -3466,7 +3474,8 @@ function assertRequest(args) {
 
 // ../../node_modules/viem/_esm/actions/public/call.js
 async function call(client, args) {
-  const { account: account_ = client.account, batch = Boolean(client.batch?.multicall), blockNumber, blockTag = "latest", accessList, blobs, code, data: data_, factory, factoryData, gas, gasPrice, maxFeePerBlobGas, maxFeePerGas, maxPriorityFeePerGas, nonce, to, value, stateOverride, ...rest } = args;
+  var _a, _b, _c, _d;
+  const { account: account_ = client.account, batch = Boolean((_a = client.batch) == null ? void 0 : _a.multicall), blockNumber, blockTag = "latest", accessList, blobs, code, data: data_, factory, factoryData, gas, gasPrice, maxFeePerBlobGas, maxFeePerGas, maxPriorityFeePerGas, nonce, to, value, stateOverride, ...rest } = args;
   const account = account_ ? parseAccount(account_) : void 0;
   if (code && (factory || factoryData))
     throw new BaseError("Cannot provide both `code` & `factory`/`factoryData` as parameters.");
@@ -3495,12 +3504,12 @@ async function call(client, args) {
     const blockNumberHex = blockNumber ? numberToHex(blockNumber) : void 0;
     const block = blockNumberHex || blockTag;
     const rpcStateOverride = serializeStateOverride(stateOverride);
-    const chainFormat = client.chain?.formatters?.transactionRequest?.format;
+    const chainFormat = (_d = (_c = (_b = client.chain) == null ? void 0 : _b.formatters) == null ? void 0 : _c.transactionRequest) == null ? void 0 : _d.format;
     const format = chainFormat || formatTransactionRequest;
     const request = format({
       // Pick out extra data that might exist on the chain's transaction request type.
       ...extract(rest, { format: chainFormat }),
-      from: account?.address,
+      from: account == null ? void 0 : account.address,
       accessList,
       blobs,
       data,
@@ -3538,10 +3547,10 @@ async function call(client, args) {
     return { data: response };
   } catch (err) {
     const data2 = getRevertErrorData(err);
-    const { offchainLookup: offchainLookup2, offchainLookupSignature: offchainLookupSignature2 } = await import("./ccip-UTQEEQUV.js");
-    if (client.ccipRead !== false && data2?.slice(0, 10) === offchainLookupSignature2 && to)
+    const { offchainLookup: offchainLookup2, offchainLookupSignature: offchainLookupSignature2 } = await import("./ccip-XAKLSPSR.js");
+    if (client.ccipRead !== false && (data2 == null ? void 0 : data2.slice(0, 10)) === offchainLookupSignature2 && to)
       return { data: await offchainLookup2(client, { data: data2, to }) };
-    if (deploylessCall && data2?.slice(0, 10) === "0x101bb98d")
+    if (deploylessCall && (data2 == null ? void 0 : data2.slice(0, 10)) === "0x101bb98d")
       throw new CounterfactualDeploymentFailedError({ factory });
     throw getCallError(err, {
       ...args,
@@ -3563,7 +3572,8 @@ function shouldPerformMulticall({ request }) {
   return true;
 }
 async function scheduleMulticall(client, args) {
-  const { batchSize = 1024, wait = 0 } = typeof client.batch?.multicall === "object" ? client.batch.multicall : {};
+  var _a;
+  const { batchSize = 1024, wait = 0 } = typeof ((_a = client.batch) == null ? void 0 : _a.multicall) === "object" ? client.batch.multicall : {};
   const { blockNumber, blockTag = "latest", data, multicallAddress: multicallAddress_, to } = args;
   let multicallAddress = multicallAddress_;
   if (!multicallAddress) {
@@ -3637,20 +3647,22 @@ function toDeploylessCallViaFactoryData(parameters) {
   });
 }
 function getRevertErrorData(err) {
+  var _a;
   if (!(err instanceof BaseError))
     return void 0;
   const error = err.walk();
-  return typeof error?.data === "object" ? error.data?.data : error.data;
+  return typeof (error == null ? void 0 : error.data) === "object" ? (_a = error.data) == null ? void 0 : _a.data : error.data;
 }
 
 // ../../node_modules/viem/_esm/errors/ccip.js
 var OffchainLookupError = class extends BaseError {
   constructor({ callbackSelector, cause, data, extraData, sender, urls }) {
+    var _a;
     super(cause.shortMessage || "An error occurred while fetching for an offchain result.", {
       cause,
       metaMessages: [
         ...cause.metaMessages || [],
-        cause.metaMessages?.length ? "" : [],
+        ((_a = cause.metaMessages) == null ? void 0 : _a.length) ? "" : [],
         "Offchain Gateway Call:",
         urls && [
           "  Gateway URL(s):",
@@ -3732,7 +3744,7 @@ async function offchainLookup(client, { blockNumber, blockTag, data, to }) {
   });
   const [sender, urls, callData, callbackSelector, extraData] = args;
   const { ccipRead } = client;
-  const ccipRequest_ = ccipRead && typeof ccipRead?.request === "function" ? ccipRead.request : ccipRequest;
+  const ccipRequest_ = ccipRead && typeof (ccipRead == null ? void 0 : ccipRead.request) === "function" ? ccipRead.request : ccipRequest;
   try {
     if (!isAddressEqual(to, sender))
       throw new OffchainLookupSenderMismatchError({ sender, to });
@@ -3759,6 +3771,7 @@ async function offchainLookup(client, { blockNumber, blockTag, data, to }) {
   }
 }
 async function ccipRequest({ data, sender, urls }) {
+  var _a;
   let error = new Error("An unknown error occurred.");
   for (let i = 0; i < urls.length; i++) {
     const url = urls[i];
@@ -3772,7 +3785,7 @@ async function ccipRequest({ data, sender, urls }) {
         method
       });
       let result;
-      if (response.headers.get("Content-Type")?.startsWith("application/json")) {
+      if ((_a = response.headers.get("Content-Type")) == null ? void 0 : _a.startsWith("application/json")) {
         result = (await response.json()).data;
       } else {
         result = await response.text();
@@ -3780,7 +3793,7 @@ async function ccipRequest({ data, sender, urls }) {
       if (!response.ok) {
         error = new HttpRequestError({
           body,
-          details: result?.error ? stringify(result.error) : response.statusText,
+          details: (result == null ? void 0 : result.error) ? stringify(result.error) : response.statusText,
           headers: response.headers,
           status: response.status,
           url

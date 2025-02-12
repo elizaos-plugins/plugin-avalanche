@@ -108,7 +108,7 @@ import {
   universalSignatureValidatorAbi,
   universalSignatureValidatorByteCode,
   withResolvers
-} from "./chunk-RLU2MBUH.js";
+} from "./chunk-EF67HYWB.js";
 
 // src/actions/tokenMillCreate.ts
 import {
@@ -167,6 +167,7 @@ var FilterTypeNotSupportedError = class extends BaseError {
 // ../../node_modules/viem/_esm/utils/abi/encodeEventTopics.js
 var docsPath = "/docs/contract/encodeEventTopics";
 function encodeEventTopics(parameters) {
+  var _a;
   const { abi: abi2, eventName, args } = parameters;
   let abiItem = abi2[0];
   if (eventName) {
@@ -181,14 +182,14 @@ function encodeEventTopics(parameters) {
   const signature = toEventSelector(definition);
   let topics = [];
   if (args && "inputs" in abiItem) {
-    const indexedInputs = abiItem.inputs?.filter((param) => "indexed" in param && param.indexed);
-    const args_ = Array.isArray(args) ? args : Object.values(args).length > 0 ? indexedInputs?.map((x) => args[x.name]) ?? [] : [];
+    const indexedInputs = (_a = abiItem.inputs) == null ? void 0 : _a.filter((param) => "indexed" in param && param.indexed);
+    const args_ = Array.isArray(args) ? args : Object.values(args).length > 0 ? (indexedInputs == null ? void 0 : indexedInputs.map((x) => args[x.name])) ?? [] : [];
     if (args_.length > 0) {
-      topics = indexedInputs?.map((param, i) => {
+      topics = (indexedInputs == null ? void 0 : indexedInputs.map((param, i) => {
         if (Array.isArray(args_[i]))
           return args_[i].map((_, j) => encodeArg({ param, value: args_[i][j] }));
         return args_[i] ? encodeArg({ param, value: args_[i] }) : null;
-      }) ?? [];
+      })) ?? [];
     }
   }
   return [signature, ...topics];
@@ -203,9 +204,10 @@ function encodeArg({ param, value }) {
 
 // ../../node_modules/viem/_esm/utils/filters/createFilterRequestScope.js
 function createFilterRequestScope(client, { method }) {
+  var _a, _b;
   const requestMap = {};
   if (client.transport.type === "fallback")
-    client.transport.onResponse?.(({ method: method_, response: id, status, transport }) => {
+    (_b = (_a = client.transport).onResponse) == null ? void 0 : _b.call(_a, ({ method: method_, response: id, status, transport }) => {
       if (status === "success" && method === method_)
         requestMap[id] = transport.request;
     });
@@ -430,10 +432,11 @@ async function recoverAuthorizationAddress(parameters) {
 // ../../node_modules/viem/_esm/errors/estimateGas.js
 var EstimateGasExecutionError = class extends BaseError {
   constructor(cause, { account, docsPath: docsPath3, chain, data, gas, gasPrice, maxFeePerGas, maxPriorityFeePerGas, nonce, to, value }) {
+    var _a;
     const prettyArgs = prettyPrint({
-      from: account?.address,
+      from: account == null ? void 0 : account.address,
       to,
-      value: typeof value !== "undefined" && `${formatEther(value)} ${chain?.nativeCurrency?.symbol || "ETH"}`,
+      value: typeof value !== "undefined" && `${formatEther(value)} ${((_a = chain == null ? void 0 : chain.nativeCurrency) == null ? void 0 : _a.symbol) || "ETH"}`,
       data,
       gas,
       gasPrice: typeof gasPrice !== "undefined" && `${formatGwei(gasPrice)} gwei`,
@@ -606,6 +609,7 @@ function formatBlock(block) {
 
 // ../../node_modules/viem/_esm/actions/public/getBlock.js
 async function getBlock(client, { blockHash, blockNumber, blockTag: blockTag_, includeTransactions: includeTransactions_ } = {}) {
+  var _a, _b, _c;
   const blockTag = blockTag_ ?? "latest";
   const includeTransactions = includeTransactions_ ?? false;
   const blockNumberHex = blockNumber !== void 0 ? numberToHex(blockNumber) : void 0;
@@ -623,7 +627,7 @@ async function getBlock(client, { blockHash, blockNumber, blockTag: blockTag_, i
   }
   if (!block)
     throw new BlockNotFoundError({ blockHash, blockNumber });
-  const format = client.chain?.formatters?.block?.format || formatBlock;
+  const format = ((_c = (_b = (_a = client.chain) == null ? void 0 : _a.formatters) == null ? void 0 : _b.block) == null ? void 0 : _c.format) || formatBlock;
   return format(block);
 }
 
@@ -640,9 +644,10 @@ async function estimateMaxPriorityFeePerGas(client, args) {
   return internal_estimateMaxPriorityFeePerGas(client, args);
 }
 async function internal_estimateMaxPriorityFeePerGas(client, args) {
+  var _a, _b;
   const { block: block_, chain = client.chain, request } = args || {};
   try {
-    const maxPriorityFeePerGas = chain?.fees?.maxPriorityFeePerGas ?? chain?.fees?.defaultPriorityFee;
+    const maxPriorityFeePerGas = ((_a = chain == null ? void 0 : chain.fees) == null ? void 0 : _a.maxPriorityFeePerGas) ?? ((_b = chain == null ? void 0 : chain.fees) == null ? void 0 : _b.defaultPriorityFee);
     if (typeof maxPriorityFeePerGas === "function") {
       const block = block_ || await getAction(client, getBlock, "getBlock")({});
       const maxPriorityFeePerGas_ = await maxPriorityFeePerGas({
@@ -679,23 +684,25 @@ async function estimateFeesPerGas(client, args) {
   return internal_estimateFeesPerGas(client, args);
 }
 async function internal_estimateFeesPerGas(client, args) {
+  var _a, _b;
   const { block: block_, chain = client.chain, request, type = "eip1559" } = args || {};
   const baseFeeMultiplier = await (async () => {
-    if (typeof chain?.fees?.baseFeeMultiplier === "function")
+    var _a2, _b2;
+    if (typeof ((_a2 = chain == null ? void 0 : chain.fees) == null ? void 0 : _a2.baseFeeMultiplier) === "function")
       return chain.fees.baseFeeMultiplier({
         block: block_,
         client,
         request
       });
-    return chain?.fees?.baseFeeMultiplier ?? 1.2;
+    return ((_b2 = chain == null ? void 0 : chain.fees) == null ? void 0 : _b2.baseFeeMultiplier) ?? 1.2;
   })();
   if (baseFeeMultiplier < 1)
     throw new BaseFeeScalarError();
-  const decimals = baseFeeMultiplier.toString().split(".")[1]?.length ?? 0;
+  const decimals = ((_a = baseFeeMultiplier.toString().split(".")[1]) == null ? void 0 : _a.length) ?? 0;
   const denominator = 10 ** decimals;
   const multiply = (base) => base * BigInt(Math.ceil(baseFeeMultiplier * denominator)) / BigInt(denominator);
   const block = block_ ? block_ : await getAction(client, getBlock, "getBlock")({});
-  if (typeof chain?.fees?.estimateFeesPerGas === "function") {
+  if (typeof ((_b = chain == null ? void 0 : chain.fees) == null ? void 0 : _b.estimateFeesPerGas) === "function") {
     const fees = await chain.fees.estimateFeesPerGas({
       block: block_,
       client,
@@ -709,19 +716,19 @@ async function internal_estimateFeesPerGas(client, args) {
   if (type === "eip1559") {
     if (typeof block.baseFeePerGas !== "bigint")
       throw new Eip1559FeesNotSupportedError();
-    const maxPriorityFeePerGas = typeof request?.maxPriorityFeePerGas === "bigint" ? request.maxPriorityFeePerGas : await internal_estimateMaxPriorityFeePerGas(client, {
+    const maxPriorityFeePerGas = typeof (request == null ? void 0 : request.maxPriorityFeePerGas) === "bigint" ? request.maxPriorityFeePerGas : await internal_estimateMaxPriorityFeePerGas(client, {
       block,
       chain,
       request
     });
     const baseFeePerGas = multiply(block.baseFeePerGas);
-    const maxFeePerGas = request?.maxFeePerGas ?? baseFeePerGas + maxPriorityFeePerGas;
+    const maxFeePerGas = (request == null ? void 0 : request.maxFeePerGas) ?? baseFeePerGas + maxPriorityFeePerGas;
     return {
       maxFeePerGas,
       maxPriorityFeePerGas
     };
   }
-  const gasPrice = request?.gasPrice ?? multiply(await getAction(client, getGasPrice, "getGasPrice")({}));
+  const gasPrice = (request == null ? void 0 : request.gasPrice) ?? multiply(await getAction(client, getGasPrice, "getGasPrice")({}));
   return {
     gasPrice
   };
@@ -932,7 +939,7 @@ var defaultParameters = [
 async function prepareTransactionRequest(client, args) {
   const { account: account_ = client.account, blobs, chain, gas, kzg, nonce, nonceManager, parameters = defaultParameters, type } = args;
   const account = account_ ? parseAccount(account_) : account_;
-  const request = { ...args, ...account ? { from: account?.address } : {} };
+  const request = { ...args, ...account ? { from: account == null ? void 0 : account.address } : {} };
   let block;
   async function getBlock2() {
     if (block)
@@ -994,7 +1001,7 @@ async function prepareTransactionRequest(client, args) {
       request.type = getTransactionType(request);
     } catch {
       const block2 = await getBlock2();
-      request.type = typeof block2?.baseFeePerGas === "bigint" ? "eip1559" : "legacy";
+      request.type = typeof (block2 == null ? void 0 : block2.baseFeePerGas) === "bigint" ? "eip1559" : "legacy";
     }
   }
   if (parameters.includes("fees")) {
@@ -1048,6 +1055,7 @@ async function getBalance(client, { address, blockNumber, blockTag = "latest" })
 
 // ../../node_modules/viem/_esm/actions/public/estimateGas.js
 async function estimateGas(client, args) {
+  var _a, _b, _c;
   const { account: account_ = client.account } = args;
   const account = account_ ? parseAccount(account_) : void 0;
   try {
@@ -1063,7 +1071,7 @@ async function estimateGas(client, args) {
       parameters: (
         // Some RPC Providers do not compute versioned hashes from blobs. We will need
         // to compute them.
-        account?.type === "local" ? void 0 : ["blobVersionedHashes"]
+        (account == null ? void 0 : account.type) === "local" ? void 0 : ["blobVersionedHashes"]
       )
     });
     const blockNumberHex = blockNumber ? numberToHex(blockNumber) : void 0;
@@ -1081,12 +1089,12 @@ async function estimateGas(client, args) {
       return void 0;
     })();
     assertRequest(args);
-    const chainFormat = client.chain?.formatters?.transactionRequest?.format;
+    const chainFormat = (_c = (_b = (_a = client.chain) == null ? void 0 : _a.formatters) == null ? void 0 : _b.transactionRequest) == null ? void 0 : _c.format;
     const format = chainFormat || formatTransactionRequest;
     const request = format({
       // Pick out extra data that might exist on the chain's transaction request type.
       ...extract(rest, { format: chainFormat }),
-      from: account?.address,
+      from: account == null ? void 0 : account.address,
       accessList,
       authorizationList,
       blobs,
@@ -1111,7 +1119,7 @@ async function estimateGas(client, args) {
           request: {
             authorizationList: void 0,
             data,
-            from: account?.address,
+            from: account == null ? void 0 : account.address,
             to: contractAddress,
             value: numberToHex(value2)
           },
@@ -1154,7 +1162,7 @@ async function estimateContractGas(client, parameters) {
       args,
       docsPath: "/docs/contract/estimateContractGas",
       functionName,
-      sender: account?.address
+      sender: account == null ? void 0 : account.address
     });
   }
 }
@@ -1175,7 +1183,7 @@ function decodeEventLog(parameters) {
   if (!(abiItem && "name" in abiItem) || abiItem.type !== "event")
     throw new AbiEventSignatureNotFoundError(signature, { docsPath: docsPath2 });
   const { name, inputs } = abiItem;
-  const isUnnamed = inputs?.some((x) => !("name" in x && x.name));
+  const isUnnamed = inputs == null ? void 0 : inputs.some((x) => !("name" in x && x.name));
   let args = isUnnamed ? [] : {};
   const indexedInputs = inputs.filter((x) => "indexed" in x && x.indexed);
   for (let i = 0; i < indexedInputs.length; i++) {
@@ -1246,6 +1254,7 @@ function parseEventLogs(parameters) {
     return [parameters.eventName];
   })();
   return logs.map((log) => {
+    var _a;
     try {
       const abiItem = abi2.find((abiItem2) => abiItem2.type === "event" && log.topics[0] === toEventSelector(abiItem2));
       if (!abiItem)
@@ -1273,7 +1282,7 @@ function parseEventLogs(parameters) {
         if (strict)
           return null;
         eventName2 = err.abiItem.name;
-        isUnnamed = err.abiItem.inputs?.some((x) => !("name" in x && x.name));
+        isUnnamed = (_a = err.abiItem.inputs) == null ? void 0 : _a.some((x) => !("name" in x && x.name));
       }
       return { ...log, args: isUnnamed ? [] : {}, eventName: eventName2 };
     }
@@ -1465,7 +1474,7 @@ async function simulateContract(client, parameters) {
       args,
       docsPath: "/docs/contract/simulateContract",
       functionName,
-      sender: account?.address
+      sender: account == null ? void 0 : account.address
     });
   }
 }
@@ -1500,11 +1509,12 @@ function observe(observerId, callbacks, fn) {
   const emit = {};
   for (const key in callbacks) {
     emit[key] = (...args) => {
+      var _a, _b;
       const listeners2 = getListeners();
       if (listeners2.length === 0)
         return;
       for (const listener of listeners2)
-        listener.fns[key]?.(...args);
+        (_b = (_a = listener.fns)[key]) == null ? void 0 : _b.call(_a, ...args);
     };
   }
   const cleanup = fn(emit);
@@ -1526,7 +1536,7 @@ function poll(fn, { emitOnBegin, initialWaitTime, interval }) {
     let data = void 0;
     if (emitOnBegin)
       data = await fn({ unpoll: unwatch });
-    const initialWait = await initialWaitTime?.(data) ?? interval;
+    const initialWait = await (initialWaitTime == null ? void 0 : initialWaitTime(data)) ?? interval;
     await wait(initialWait);
     const poll2 = async () => {
       if (!active)
@@ -1653,6 +1663,7 @@ function watchContractEvent(client, parameters) {
       let filter;
       let initialized = false;
       const unwatch = poll(async () => {
+        var _a;
         if (!initialized) {
           try {
             filter = await getAction(client, createContractEventFilter, "createContractEventFilter")({
@@ -1699,7 +1710,7 @@ function watchContractEvent(client, parameters) {
         } catch (err) {
           if (filter && err instanceof InvalidInputRpcError)
             initialized = false;
-          emit.onError?.(err);
+          (_a = emit.onError) == null ? void 0 : _a.call(emit, err);
         }
       }, {
         emitOnBegin: true,
@@ -1747,6 +1758,7 @@ function watchContractEvent(client, parameters) {
           const { unsubscribe: unsubscribe_ } = await transport.subscribe({
             params: ["logs", { address, topics }],
             onData(data) {
+              var _a;
               if (!active)
                 return;
               const log = data.result;
@@ -1769,7 +1781,7 @@ function watchContractEvent(client, parameters) {
                   if (strict_)
                     return;
                   eventName2 = err.abiItem.name;
-                  isUnnamed = err.abiItem.inputs?.some((x) => !("name" in x && x.name));
+                  isUnnamed = (_a = err.abiItem.inputs) == null ? void 0 : _a.some((x) => !("name" in x && x.name));
                 }
                 const formatted = formatLog(log, {
                   args: isUnnamed ? [] : {},
@@ -1779,14 +1791,15 @@ function watchContractEvent(client, parameters) {
               }
             },
             onError(error) {
-              emit.onError?.(error);
+              var _a;
+              (_a = emit.onError) == null ? void 0 : _a.call(emit, error);
             }
           });
           unsubscribe = unsubscribe_;
           if (!active)
             unsubscribe();
         } catch (err) {
-          onError?.(err);
+          onError == null ? void 0 : onError(err);
         }
       })();
       return () => unsubscribe();
@@ -1851,6 +1864,7 @@ async function sendRawTransaction(client, { serializedTransaction }) {
 // ../../node_modules/viem/_esm/actions/wallet/sendTransaction.js
 var supportsWalletNamespace = new LruMap(128);
 async function sendTransaction(client, parameters) {
+  var _a, _b, _c, _d;
   const { account: account_ = client.account, chain = client.chain, accessList, authorizationList, blobs, data, gas, gasPrice, maxFeePerBlobGas, maxFeePerGas, maxPriorityFeePerGas, nonce, value, ...rest } = parameters;
   if (typeof account_ === "undefined")
     throw new AccountNotFoundError({
@@ -1870,7 +1884,7 @@ async function sendTransaction(client, parameters) {
         });
       return void 0;
     })();
-    if (account?.type === "json-rpc" || account === null) {
+    if ((account == null ? void 0 : account.type) === "json-rpc" || account === null) {
       let chainId;
       if (chain !== null) {
         chainId = await getAction(client, getChainId, "getChainId")({});
@@ -1879,7 +1893,7 @@ async function sendTransaction(client, parameters) {
           chain
         });
       }
-      const chainFormat = client.chain?.formatters?.transactionRequest?.format;
+      const chainFormat = (_c = (_b = (_a = client.chain) == null ? void 0 : _a.formatters) == null ? void 0 : _b.transactionRequest) == null ? void 0 : _c.format;
       const format = chainFormat || formatTransactionRequest;
       const request = format({
         // Pick out extra data that might exist on the chain's transaction request type.
@@ -1889,7 +1903,7 @@ async function sendTransaction(client, parameters) {
         blobs,
         chainId,
         data,
-        from: account?.address,
+        from: account == null ? void 0 : account.address,
         gas,
         gasPrice,
         maxFeePerBlobGas,
@@ -1929,7 +1943,7 @@ async function sendTransaction(client, parameters) {
         throw error;
       }
     }
-    if (account?.type === "local") {
+    if ((account == null ? void 0 : account.type) === "local") {
       const request = await getAction(client, prepareTransactionRequest, "prepareTransactionRequest")({
         account,
         accessList,
@@ -1949,7 +1963,7 @@ async function sendTransaction(client, parameters) {
         ...rest,
         to
       });
-      const serializer = chain?.serializers?.transaction;
+      const serializer = (_d = chain == null ? void 0 : chain.serializers) == null ? void 0 : _d.transaction;
       const serializedTransaction = await account.signTransaction(request, {
         serializer
       });
@@ -1957,7 +1971,7 @@ async function sendTransaction(client, parameters) {
         serializedTransaction
       });
     }
-    if (account?.type === "smart")
+    if ((account == null ? void 0 : account.type) === "smart")
       throw new AccountTypeNotSupportedError({
         metaMessages: [
           "Consider using the `sendUserOperation` Action instead."
@@ -1967,7 +1981,7 @@ async function sendTransaction(client, parameters) {
       });
     throw new AccountTypeNotSupportedError({
       docsPath: "/docs/actions/wallet/sendTransaction",
-      type: account?.type
+      type: account == null ? void 0 : account.type
     });
   } catch (err) {
     if (err instanceof AccountTypeNotSupportedError)
@@ -2007,7 +2021,7 @@ async function writeContract(client, parameters) {
       args,
       docsPath: "/docs/contract/writeContract",
       functionName,
-      sender: account?.address
+      sender: account == null ? void 0 : account.address
     });
   }
 }
@@ -2260,9 +2274,10 @@ function buildRequest(request, options = {}) {
       }
     }, {
       delay: ({ count, error }) => {
+        var _a;
         if (error && error instanceof HttpRequestError) {
-          const retryAfter = error?.headers?.get("Retry-After");
-          if (retryAfter?.match(/\d/))
+          const retryAfter = (_a = error == null ? void 0 : error.headers) == null ? void 0 : _a.get("Retry-After");
+          if (retryAfter == null ? void 0 : retryAfter.match(/\d/))
             return Number.parseInt(retryAfter) * 1e3;
         }
         return ~~(1 << count) * retryDelay;
@@ -2349,9 +2364,9 @@ function withTimeout(fn, { errorInstance = new Error("timed out"), timeout, sign
             }
           }, timeout);
         }
-        resolve(await fn({ signal: controller?.signal || null }));
+        resolve(await fn({ signal: (controller == null ? void 0 : controller.signal) || null }));
       } catch (err) {
-        if (err?.name === "AbortError")
+        if ((err == null ? void 0 : err.name) === "AbortError")
           reject(errorInstance);
         reject(err);
       } finally {
@@ -2379,6 +2394,7 @@ var idCache = /* @__PURE__ */ createIdStore();
 function getHttpRpcClient(url, options = {}) {
   return {
     async request(params) {
+      var _a;
       const { body, onRequest = options.onRequest, onResponse = options.onResponse, timeout = options.timeout ?? 1e4 } = params;
       const fetchOptions = {
         ...options.fetchOptions ?? {},
@@ -2406,7 +2422,7 @@ function getHttpRpcClient(url, options = {}) {
             signal: signal_ || (timeout > 0 ? signal : null)
           };
           const request = new Request(url, init);
-          const args = await onRequest?.(request, init) ?? { ...init, url };
+          const args = await (onRequest == null ? void 0 : onRequest(request, init)) ?? { ...init, url };
           const response2 = await fetch(args.url ?? url, args);
           return response2;
         }, {
@@ -2417,7 +2433,7 @@ function getHttpRpcClient(url, options = {}) {
         if (onResponse)
           await onResponse(response);
         let data;
-        if (response.headers.get("Content-Type")?.startsWith("application/json"))
+        if ((_a = response.headers.get("Content-Type")) == null ? void 0 : _a.startsWith("application/json"))
           data = await response.json();
         else {
           data = await response.text();
@@ -2461,7 +2477,7 @@ function http(url, config = {}) {
     const { batchSize = 1e3, wait: wait2 = 0 } = typeof batch === "object" ? batch : {};
     const retryCount = config.retryCount ?? retryCount_;
     const timeout = timeout_ ?? config.timeout ?? 1e4;
-    const url_ = url || chain?.rpcUrls.default.http[0];
+    const url_ = url || (chain == null ? void 0 : chain.rpcUrls.default.http[0]);
     if (!url_)
       throw new UrlRequiredError();
     const rpcClient = getHttpRpcClient(url_, {
@@ -2513,22 +2529,23 @@ function http(url, config = {}) {
 
 // ../../node_modules/viem/_esm/utils/ens/errors.js
 function isNullUniversalResolverError(err, callType) {
+  var _a, _b, _c, _d, _e, _f;
   if (!(err instanceof BaseError))
     return false;
   const cause = err.walk((e) => e instanceof ContractFunctionRevertedError);
   if (!(cause instanceof ContractFunctionRevertedError))
     return false;
-  if (cause.data?.errorName === "ResolverNotFound")
+  if (((_a = cause.data) == null ? void 0 : _a.errorName) === "ResolverNotFound")
     return true;
-  if (cause.data?.errorName === "ResolverWildcardNotSupported")
+  if (((_b = cause.data) == null ? void 0 : _b.errorName) === "ResolverWildcardNotSupported")
     return true;
-  if (cause.data?.errorName === "ResolverNotContract")
+  if (((_c = cause.data) == null ? void 0 : _c.errorName) === "ResolverNotContract")
     return true;
-  if (cause.data?.errorName === "ResolverError")
+  if (((_d = cause.data) == null ? void 0 : _d.errorName) === "ResolverError")
     return true;
-  if (cause.data?.errorName === "HttpError")
+  if (((_e = cause.data) == null ? void 0 : _e.errorName) === "HttpError")
     return true;
-  if (cause.reason?.includes("Wildcard on non-extended resolvers is not supported"))
+  if ((_f = cause.reason) == null ? void 0 : _f.includes("Wildcard on non-extended resolvers is not supported"))
     return true;
   if (callType === "reverse" && cause.reason === panicReasons[50])
     return true;
@@ -2691,7 +2708,7 @@ async function isImageUri(uri) {
     const res = await fetch(uri, { method: "HEAD" });
     if (res.status === 200) {
       const contentType = res.headers.get("content-type");
-      return contentType?.startsWith("image/");
+      return contentType == null ? void 0 : contentType.startsWith("image/");
     }
     return false;
   } catch (error) {
@@ -2723,16 +2740,16 @@ function resolveAvatarUri({ uri, gatewayUrls }) {
   const isEncoded = base64Regex.test(uri);
   if (isEncoded)
     return { uri, isOnChain: true, isEncoded };
-  const ipfsGateway = getGateway(gatewayUrls?.ipfs, "https://ipfs.io");
-  const arweaveGateway = getGateway(gatewayUrls?.arweave, "https://arweave.net");
+  const ipfsGateway = getGateway(gatewayUrls == null ? void 0 : gatewayUrls.ipfs, "https://ipfs.io");
+  const arweaveGateway = getGateway(gatewayUrls == null ? void 0 : gatewayUrls.arweave, "https://arweave.net");
   const networkRegexMatch = uri.match(networkRegex);
-  const { protocol, subpath, target, subtarget = "" } = networkRegexMatch?.groups || {};
+  const { protocol, subpath, target, subtarget = "" } = (networkRegexMatch == null ? void 0 : networkRegexMatch.groups) || {};
   const isIPNS = protocol === "ipns:/" || subpath === "ipns/";
   const isIPFS = protocol === "ipfs:/" || subpath === "ipfs/" || ipfsHashRegex.test(uri);
   if (uri.startsWith("http") && !isIPNS && !isIPFS) {
     let replacedUri = uri;
-    if (gatewayUrls?.arweave)
-      replacedUri = uri.replace(/https:\/\/arweave.net/g, gatewayUrls?.arweave);
+    if (gatewayUrls == null ? void 0 : gatewayUrls.arweave)
+      replacedUri = uri.replace(/https:\/\/arweave.net/g, gatewayUrls == null ? void 0 : gatewayUrls.arweave);
     return { uri: replacedUri, isOnChain: false, isEncoded: false };
   }
   if ((isIPNS || isIPFS) && target) {
@@ -3128,11 +3145,12 @@ async function getCode(client, { address, blockNumber, blockTag = "latest" }) {
 
 // ../../node_modules/viem/_esm/utils/formatters/feeHistory.js
 function formatFeeHistory(feeHistory) {
+  var _a;
   return {
     baseFeePerGas: feeHistory.baseFeePerGas.map((value) => BigInt(value)),
     gasUsedRatio: feeHistory.gasUsedRatio,
     oldestBlock: BigInt(feeHistory.oldestBlock),
-    reward: feeHistory.reward?.map((reward) => reward.map((value) => BigInt(value)))
+    reward: (_a = feeHistory.reward) == null ? void 0 : _a.map((reward) => reward.map((value) => BigInt(value)))
   };
 }
 
@@ -3275,7 +3293,7 @@ function encodeType({ primaryType, types }) {
 }
 function findTypeDependencies({ primaryType: primaryType_, types }, results = /* @__PURE__ */ new Set()) {
   const match = primaryType_.match(/^\w*/u);
-  const primaryType = match?.[0];
+  const primaryType = match == null ? void 0 : match[0];
   if (results.has(primaryType) || types[primaryType] === void 0) {
     return results;
   }
@@ -3387,17 +3405,17 @@ function validateTypedData(parameters) {
 }
 function getTypesForEIP712Domain({ domain }) {
   return [
-    typeof domain?.name === "string" && { name: "name", type: "string" },
-    domain?.version && { name: "version", type: "string" },
-    typeof domain?.chainId === "number" && {
+    typeof (domain == null ? void 0 : domain.name) === "string" && { name: "name", type: "string" },
+    (domain == null ? void 0 : domain.version) && { name: "version", type: "string" },
+    typeof (domain == null ? void 0 : domain.chainId) === "number" && {
       name: "chainId",
       type: "uint256"
     },
-    domain?.verifyingContract && {
+    (domain == null ? void 0 : domain.verifyingContract) && {
       name: "verifyingContract",
       type: "address"
     },
-    domain?.salt && { name: "salt", type: "bytes32" }
+    (domain == null ? void 0 : domain.salt) && { name: "salt", type: "bytes32" }
   ].filter(Boolean);
 }
 function validateReference(type) {
@@ -3862,6 +3880,7 @@ async function getStorageAt(client, { address, blockNumber, blockTag = "latest",
 
 // ../../node_modules/viem/_esm/actions/public/getTransaction.js
 async function getTransaction(client, { blockHash, blockNumber, blockTag: blockTag_, hash, index: index2 }) {
+  var _a, _b, _c;
   const blockTag = blockTag_ || "latest";
   const blockNumberHex = blockNumber !== void 0 ? numberToHex(blockNumber) : void 0;
   let transaction = null;
@@ -3889,7 +3908,7 @@ async function getTransaction(client, { blockHash, blockNumber, blockTag: blockT
       hash,
       index: index2
     });
-  const format = client.chain?.formatters?.transaction?.format || formatTransaction;
+  const format = ((_c = (_b = (_a = client.chain) == null ? void 0 : _a.formatters) == null ? void 0 : _b.transaction) == null ? void 0 : _c.format) || formatTransaction;
   return format(transaction);
 }
 
@@ -3899,7 +3918,7 @@ async function getTransactionConfirmations(client, { hash, transactionReceipt })
     getAction(client, getBlockNumber, "getBlockNumber")({}),
     hash ? getAction(client, getTransaction, "getTransaction")({ hash }) : void 0
   ]);
-  const transactionBlockNumber = transactionReceipt?.blockNumber || transaction?.blockNumber;
+  const transactionBlockNumber = (transactionReceipt == null ? void 0 : transactionReceipt.blockNumber) || (transaction == null ? void 0 : transaction.blockNumber);
   if (!transactionBlockNumber)
     return 0n;
   return blockNumber - transactionBlockNumber + 1n;
@@ -3907,21 +3926,23 @@ async function getTransactionConfirmations(client, { hash, transactionReceipt })
 
 // ../../node_modules/viem/_esm/actions/public/getTransactionReceipt.js
 async function getTransactionReceipt(client, { hash }) {
+  var _a, _b, _c;
   const receipt = await client.request({
     method: "eth_getTransactionReceipt",
     params: [hash]
   }, { dedupe: true });
   if (!receipt)
     throw new TransactionReceiptNotFoundError({ hash });
-  const format = client.chain?.formatters?.transactionReceipt?.format || formatTransactionReceipt;
+  const format = ((_c = (_b = (_a = client.chain) == null ? void 0 : _a.formatters) == null ? void 0 : _b.transactionReceipt) == null ? void 0 : _c.format) || formatTransactionReceipt;
   return format(receipt);
 }
 
 // ../../node_modules/viem/_esm/actions/public/multicall.js
 async function multicall(client, parameters) {
+  var _a;
   const { allowFailure = true, batchSize: batchSize_, blockNumber, blockTag, multicallAddress: multicallAddress_, stateOverride } = parameters;
   const contracts = parameters.contracts;
-  const batchSize = batchSize_ ?? (typeof client.batch?.multicall === "object" && client.batch.multicall.batchSize || 1024);
+  const batchSize = batchSize_ ?? (typeof ((_a = client.batch) == null ? void 0 : _a.multicall) === "object" && client.batch.multicall.batchSize || 1024);
   let multicallAddress = multicallAddress_;
   if (!multicallAddress) {
     if (!client.chain)
@@ -4056,7 +4077,8 @@ function serializeSignature({ r, s, to = "hex", v, yParity }) {
 
 // ../../node_modules/viem/_esm/actions/public/verifyHash.js
 async function verifyHash(client, parameters) {
-  const { address, factory, factoryData, hash, signature, universalSignatureVerifierAddress = client.chain?.contracts?.universalSignatureVerifier?.address, ...rest } = parameters;
+  var _a, _b, _c;
+  const { address, factory, factoryData, hash, signature, universalSignatureVerifierAddress = (_c = (_b = (_a = client.chain) == null ? void 0 : _a.contracts) == null ? void 0 : _b.universalSignatureVerifier) == null ? void 0 : _c.address, ...rest } = parameters;
   const signatureHex = (() => {
     if (isHex(signature))
       return signature;
@@ -4156,6 +4178,7 @@ function watchBlockNumber(client, { emitOnBegin = false, emitMissed = false, onB
       pollingInterval
     ]);
     return observe(observerId, { onBlockNumber, onError }, (emit) => poll(async () => {
+      var _a;
       try {
         const blockNumber = await getAction(client, getBlockNumber, "getBlockNumber")({ cacheTime: 0 });
         if (prevBlockNumber) {
@@ -4173,7 +4196,7 @@ function watchBlockNumber(client, { emitOnBegin = false, emitMissed = false, onB
           prevBlockNumber = blockNumber;
         }
       } catch (err) {
-        emit.onError?.(err);
+        (_a = emit.onError) == null ? void 0 : _a.call(emit, err);
       }
     }, {
       emitOnBegin,
@@ -4204,21 +4227,23 @@ function watchBlockNumber(client, { emitOnBegin = false, emitMissed = false, onB
           const { unsubscribe: unsubscribe_ } = await transport.subscribe({
             params: ["newHeads"],
             onData(data) {
+              var _a;
               if (!active)
                 return;
-              const blockNumber = hexToBigInt(data.result?.number);
+              const blockNumber = hexToBigInt((_a = data.result) == null ? void 0 : _a.number);
               emit.onBlockNumber(blockNumber, prevBlockNumber);
               prevBlockNumber = blockNumber;
             },
             onError(error) {
-              emit.onError?.(error);
+              var _a;
+              (_a = emit.onError) == null ? void 0 : _a.call(emit, error);
             }
           });
           unsubscribe = unsubscribe_;
           if (!active)
             unsubscribe();
         } catch (err) {
-          onError?.(err);
+          onError == null ? void 0 : onError(err);
         }
       })();
       return () => unsubscribe();
@@ -4317,7 +4342,8 @@ async function waitForTransactionReceipt(client, {
                 reason = "cancelled";
               }
               done(() => {
-                emit.onReplaced?.({
+                var _a;
+                (_a = emit.onReplaced) == null ? void 0 : _a.call(emit, {
                   reason,
                   replacedTransaction,
                   transaction: replacementTransaction,
@@ -4362,16 +4388,17 @@ function watchBlocks(client, { blockTag = "latest", emitMissed = false, emitOnBe
       pollingInterval
     ]);
     return observe(observerId, { onBlock, onError }, (emit) => poll(async () => {
+      var _a;
       try {
         const block = await getAction(client, getBlock, "getBlock")({
           blockTag,
           includeTransactions
         });
-        if (block.number && prevBlock?.number) {
+        if (block.number && (prevBlock == null ? void 0 : prevBlock.number)) {
           if (block.number === prevBlock.number)
             return;
           if (block.number - prevBlock.number > 1 && emitMissed) {
-            for (let i = prevBlock?.number + 1n; i < block.number; i++) {
+            for (let i = (prevBlock == null ? void 0 : prevBlock.number) + 1n; i < block.number; i++) {
               const block2 = await getAction(client, getBlock, "getBlock")({
                 blockNumber: i,
                 includeTransactions
@@ -4383,8 +4410,8 @@ function watchBlocks(client, { blockTag = "latest", emitMissed = false, emitOnBe
         }
         if (
           // If no previous block exists, emit.
-          !prevBlock?.number || // If the block tag is "pending" with no block number, emit.
-          blockTag === "pending" && !block?.number || // If the next block number is greater than the previous block number, emit.
+          !(prevBlock == null ? void 0 : prevBlock.number) || // If the block tag is "pending" with no block number, emit.
+          blockTag === "pending" && !(block == null ? void 0 : block.number) || // If the next block number is greater than the previous block number, emit.
           // We don't want to emit blocks in the past.
           block.number && block.number > prevBlock.number
         ) {
@@ -4392,7 +4419,7 @@ function watchBlocks(client, { blockTag = "latest", emitMissed = false, emitOnBe
           prevBlock = block;
         }
       } catch (err) {
-        emit.onError?.(err);
+        (_a = emit.onError) == null ? void 0 : _a.call(emit, err);
       }
     }, {
       emitOnBegin,
@@ -4444,14 +4471,14 @@ function watchBlocks(client, { blockTag = "latest", emitMissed = false, emitOnBe
             prevBlock = block;
           },
           onError(error) {
-            onError?.(error);
+            onError == null ? void 0 : onError(error);
           }
         });
         unsubscribe = unsubscribe_;
         if (!active)
           unsubscribe();
       } catch (err) {
-        onError?.(err);
+        onError == null ? void 0 : onError(err);
       }
     })();
     return () => unsubscribe();
@@ -4491,6 +4518,7 @@ function watchEvent(client, { address, args, batch = true, event, events, fromBl
       let filter;
       let initialized = false;
       const unwatch = poll(async () => {
+        var _a;
         if (!initialized) {
           try {
             filter = await getAction(client, createEventFilter, "createEventFilter")({
@@ -4536,7 +4564,7 @@ function watchEvent(client, { address, args, batch = true, event, events, fromBl
         } catch (err) {
           if (filter && err instanceof InvalidInputRpcError)
             initialized = false;
-          emit.onError?.(err);
+          (_a = emit.onError) == null ? void 0 : _a.call(emit, err);
         }
       }, {
         emitOnBegin: true,
@@ -4578,6 +4606,7 @@ function watchEvent(client, { address, args, batch = true, event, events, fromBl
         const { unsubscribe: unsubscribe_ } = await transport.subscribe({
           params: ["logs", { address, topics }],
           onData(data) {
+            var _a;
             if (!active)
               return;
             const log = data.result;
@@ -4597,7 +4626,7 @@ function watchEvent(client, { address, args, batch = true, event, events, fromBl
                 if (strict_)
                   return;
                 eventName = err.abiItem.name;
-                isUnnamed = err.abiItem.inputs?.some((x) => !("name" in x && x.name));
+                isUnnamed = (_a = err.abiItem.inputs) == null ? void 0 : _a.some((x) => !("name" in x && x.name));
               }
               const formatted = formatLog(log, {
                 args: isUnnamed ? [] : {},
@@ -4607,14 +4636,14 @@ function watchEvent(client, { address, args, batch = true, event, events, fromBl
             }
           },
           onError(error) {
-            onError?.(error);
+            onError == null ? void 0 : onError(error);
           }
         });
         unsubscribe = unsubscribe_;
         if (!active)
           unsubscribe();
       } catch (err) {
-        onError?.(err);
+        onError == null ? void 0 : onError(err);
       }
     })();
     return () => unsubscribe();
@@ -4635,6 +4664,7 @@ function watchPendingTransactions(client, { batch = true, onError, onTransaction
     return observe(observerId, { onTransactions, onError }, (emit) => {
       let filter;
       const unwatch = poll(async () => {
+        var _a;
         try {
           if (!filter) {
             try {
@@ -4654,7 +4684,7 @@ function watchPendingTransactions(client, { batch = true, onError, onTransaction
             for (const hash of hashes)
               emit.onTransactions([hash]);
         } catch (err) {
-          emit.onError?.(err);
+          (_a = emit.onError) == null ? void 0 : _a.call(emit, err);
         }
       }, {
         emitOnBegin: true,
@@ -4681,14 +4711,14 @@ function watchPendingTransactions(client, { batch = true, onError, onTransaction
             onTransactions([transaction]);
           },
           onError(error) {
-            onError?.(error);
+            onError == null ? void 0 : onError(error);
           }
         });
         unsubscribe = unsubscribe_;
         if (!active)
           unsubscribe();
       } catch (err) {
-        onError?.(err);
+        onError == null ? void 0 : onError(err);
       }
     })();
     return () => unsubscribe();
@@ -4698,9 +4728,10 @@ function watchPendingTransactions(client, { batch = true, onError, onTransaction
 
 // ../../node_modules/viem/_esm/utils/siwe/parseSiweMessage.js
 function parseSiweMessage(message) {
-  const { scheme, statement, ...prefix } = message.match(prefixRegex)?.groups ?? {};
-  const { chainId, expirationTime, issuedAt, notBefore, requestId, ...suffix } = message.match(suffixRegex)?.groups ?? {};
-  const resources = message.split("Resources:")[1]?.split("\n- ").slice(1);
+  var _a, _b, _c;
+  const { scheme, statement, ...prefix } = ((_a = message.match(prefixRegex)) == null ? void 0 : _a.groups) ?? {};
+  const { chainId, expirationTime, issuedAt, notBefore, requestId, ...suffix } = ((_b = message.match(suffixRegex)) == null ? void 0 : _b.groups) ?? {};
+  const resources = (_c = message.split("Resources:")[1]) == null ? void 0 : _c.split("\n- ").slice(1);
   return {
     ...prefix,
     ...suffix,
@@ -4846,7 +4877,8 @@ function deployContract(walletClient, parameters) {
 
 // ../../node_modules/viem/_esm/actions/wallet/getAddresses.js
 async function getAddresses(client) {
-  if (client.account?.type === "local")
+  var _a;
+  if (((_a = client.account) == null ? void 0 : _a.type) === "local")
     return [client.account.address];
   const addresses = await client.request({ method: "eth_accounts" }, { dedupe: true });
   return addresses.map((address) => checksumAddress(address));
@@ -4896,6 +4928,7 @@ async function signMessage(client, { account: account_ = client.account, message
 
 // ../../node_modules/viem/_esm/actions/wallet/signTransaction.js
 async function signTransaction(client, parameters) {
+  var _a, _b, _c, _d;
   const { account: account_ = client.account, chain = client.chain, ...transaction } = parameters;
   if (!account_)
     throw new AccountNotFoundError({
@@ -4912,13 +4945,13 @@ async function signTransaction(client, parameters) {
       currentChainId: chainId,
       chain
     });
-  const formatters = chain?.formatters || client.chain?.formatters;
-  const format = formatters?.transactionRequest?.format || formatTransactionRequest;
+  const formatters = (chain == null ? void 0 : chain.formatters) || ((_a = client.chain) == null ? void 0 : _a.formatters);
+  const format = ((_b = formatters == null ? void 0 : formatters.transactionRequest) == null ? void 0 : _b.format) || formatTransactionRequest;
   if (account.signTransaction)
     return account.signTransaction({
       ...transaction,
       chainId
-    }, { serializer: client.chain?.serializers?.transaction });
+    }, { serializer: (_d = (_c = client.chain) == null ? void 0 : _c.serializers) == null ? void 0 : _d.transaction });
   return await client.request({
     method: "eth_signTransaction",
     params: [
@@ -5799,7 +5832,7 @@ var tokenMillCreate_default = {
     elizaLogger3.debug("Create content:", content);
     if (!isTokenMillCreateContent(runtime, content)) {
       elizaLogger3.error("Invalid content for CREATE_TOKEN action.");
-      callback?.({
+      callback == null ? void 0 : callback({
         text: "Unable to process transfer request. Invalid content provided.",
         content: { error: "Invalid content" }
       });
@@ -5810,7 +5843,7 @@ var tokenMillCreate_default = {
       content.name,
       content.symbol
     );
-    callback?.({
+    callback == null ? void 0 : callback({
       text: `Created token ${content.name} with symbol ${content.symbol}. CA: ${baseToken}`,
       content: { tx, baseToken, market }
     });
@@ -5929,7 +5962,7 @@ var transfer_default = {
     elizaLogger4.log("Starting SEND_TOKEN handler...");
     if (message.content.source === "direct") {
     } else {
-      callback?.({
+      callback == null ? void 0 : callback({
         text: "i can't do that for you.",
         content: { error: "Transfer not allowed" }
       });
@@ -5953,7 +5986,7 @@ var transfer_default = {
     elizaLogger4.debug("Transfer content:", content);
     if (!isTransferContent(runtime, content)) {
       elizaLogger4.error("Invalid content for TRANSFER_TOKEN action.");
-      callback?.({
+      callback == null ? void 0 : callback({
         text: "Unable to process transfer request. Invalid content provided.",
         content: { error: "Invalid transfer content" }
       });
@@ -5977,18 +6010,18 @@ var transfer_default = {
     if (tx) {
       const receipt = await getTxReceipt(runtime, tx);
       if (receipt.status === "success") {
-        callback?.({
+        callback == null ? void 0 : callback({
           text: "transfer successful",
           content: { success: true, txHash: tx }
         });
       } else {
-        callback?.({
+        callback == null ? void 0 : callback({
           text: "transfer failed",
           content: { error: "Transfer failed" }
         });
       }
     } else {
-      callback?.({
+      callback == null ? void 0 : callback({
         text: "transfer failed",
         content: { error: "Transfer failed" }
       });
@@ -6105,7 +6138,7 @@ var yakSwap_default = {
     });
     if (!isSwapContent(runtime, content)) {
       elizaLogger5.error("Invalid content for SWAP_TOKEN action.");
-      callback?.({
+      callback == null ? void 0 : callback({
         text: "Unable to process swap request. Invalid content provided.",
         content: { error: "Invalid swap content" }
       });
@@ -6130,14 +6163,14 @@ var yakSwap_default = {
         yakRouterAddress,
         content.amount
       );
-      callback?.({
+      callback == null ? void 0 : callback({
         text: "approving token...",
         content: { success: true }
       });
       if (tx) {
         let receipt = await getTxReceipt(runtime, tx);
         if (receipt.status === "success") {
-          callback?.({
+          callback == null ? void 0 : callback({
             text: "token approved, swapping...",
             content: { success: true, txHash: tx }
           });
@@ -6146,13 +6179,13 @@ var yakSwap_default = {
             receipt = await getTxReceipt(runtime, swapTx);
             if (receipt.status === "success") {
               elizaLogger5.log("Swap successful");
-              callback?.({
+              callback == null ? void 0 : callback({
                 text: "swap successful",
                 content: { success: true, txHash: swapTx }
               });
             } else {
               elizaLogger5.error("Swap failed");
-              callback?.({
+              callback == null ? void 0 : callback({
                 text: "swap failed",
                 content: { error: "Swap failed" }
               });
@@ -6160,13 +6193,13 @@ var yakSwap_default = {
           }
         } else {
           elizaLogger5.error("Approve failed");
-          callback?.({
+          callback == null ? void 0 : callback({
             text: "approve failed",
             content: { error: "Approve failed" }
           });
         }
       } else {
-        callback?.({
+        callback == null ? void 0 : callback({
           text: "approve failed",
           content: { error: "Approve failed" }
         });
@@ -6270,7 +6303,7 @@ var yakStrategy_default = {
       elizaLogger6.error(
         "Invalid content for DEPOSIT_TO_STRATEGY action."
       );
-      callback?.({
+      callback == null ? void 0 : callback({
         text: "Unable to process deposit request. Invalid content provided.",
         content: { error: "Invalid deposit content" }
       });
@@ -6286,14 +6319,14 @@ var yakStrategy_default = {
         content.strategyAddress,
         content.amount
       );
-      callback?.({
+      callback == null ? void 0 : callback({
         text: "approving token...",
         content: { success: true }
       });
       if (tx) {
         let receipt = await getTxReceipt(runtime, tx);
         if (receipt.status === "success") {
-          callback?.({
+          callback == null ? void 0 : callback({
             text: "token approved, depositing...",
             content: { success: true, txHash: tx }
           });
@@ -6306,25 +6339,25 @@ var yakStrategy_default = {
           if (depositTx) {
             receipt = await getTxReceipt(runtime, depositTx);
             if (receipt.status === "success") {
-              callback?.({
+              callback == null ? void 0 : callback({
                 text: "deposit successful",
                 content: { success: true, txHash: depositTx }
               });
             } else {
-              callback?.({
+              callback == null ? void 0 : callback({
                 text: "deposit failed",
                 content: { error: "Deposit failed" }
               });
             }
           }
         } else {
-          callback?.({
+          callback == null ? void 0 : callback({
             text: "approve failed",
             content: { error: "Approve failed" }
           });
         }
       } else {
-        callback?.({
+        callback == null ? void 0 : callback({
           text: "approve failed",
           content: { error: "Approve failed" }
         });
